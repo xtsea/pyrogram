@@ -89,7 +89,7 @@ InlineQuery
     {inline_query_toctree}
 
 PreCheckoutQuery
------------
+----------------
 
 .. hlist::
     :columns: 2

@@ -152,7 +152,7 @@ Authorization
     {authorization}
 
 Stories
--------------
+-------
 
 .. autosummary::
     :nosignatures:
@@ -165,7 +165,7 @@ Stories
     {stories}
 
 Premium
--------------
+-------
 
 .. autosummary::
     :nosignatures:
@@ -176,6 +176,45 @@ Premium
     :hidden:
 
     {premium}
+
+Phone
+-----
+
+.. autosummary::
+    :nosignatures:
+
+    {phone}
+
+.. toctree::
+    :hidden:
+
+    {phone}
+
+Business
+--------
+
+.. autosummary::
+    :nosignatures:
+
+    {business}
+
+.. toctree::
+    :hidden:
+
+    {business}
+
+Payments
+--------
+
+.. autosummary::
+    :nosignatures:
+
+    {payments}
+
+.. toctree::
+    :hidden:
+
+    {payments}
 
 Advanced
 --------
