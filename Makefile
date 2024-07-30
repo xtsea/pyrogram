@@ -20,13 +20,21 @@ clean-build:
 clean-api:
 	$(RM) pyrogram/errors/exceptions pyrogram/raw/all.py pyrogram/raw/base pyrogram/raw/functions pyrogram/raw/types
 
+clean-docs:
+	$(RM) docs/build docs/source/api/bound-methods docs/source/api/methods docs/source/api/types docs/source/telegram
+
 clean:
 	make clean-build
 	make clean-api
+	make clean-docs
 
 api:
 	cd compiler/api && ../../$(PYTHON) compiler.py
 	cd compiler/errors && ../../$(PYTHON) compiler.py
+
+docs:
+	cd compiler/docs && ../../$(PYTHON) compiler.py
+	$(VENV)/bin/sphinx-build -b dirhtml "docs/source" "docs/build/html" -j auto
 
 build:
 	make clean
