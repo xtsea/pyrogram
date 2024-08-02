@@ -115,7 +115,7 @@ ChatJoinRequest
     {chat_join_request_toctree}
 
 Story
----------------
+-----
 
 .. hlist::
     :columns: 3
@@ -128,7 +128,7 @@ Story
     {story_toctree}
 
 Folder
----------------
+------
 
 .. hlist::
     :columns: 2
@@ -139,3 +139,16 @@ Folder
     :hidden:
 
     {folder_toctree}
+
+ActiveSession
+-------------
+
+.. hlist::
+    :columns: 2
+
+    {active_session_hlist}
+
+.. toctree::
+    :hidden:
+
+    {active_session_toctree}
