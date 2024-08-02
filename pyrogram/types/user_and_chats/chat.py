@@ -342,7 +342,7 @@ class Chat(Object):
         self.is_banned = is_banned
         self.is_call_active = is_call_active
         self.is_call_not_empty = is_call_not_empty
-        self.is_publoc = is_public
+        self.is_public = is_public
         self.title = title
         self.username = username
         self.usernames = usernames
