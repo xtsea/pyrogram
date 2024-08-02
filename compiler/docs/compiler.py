@@ -373,6 +373,7 @@ def pyrogram_api():
             log_out
             get_active_sessions
             reset_session
+            reset_sessions
         """,
         advanced="""
         Advanced
