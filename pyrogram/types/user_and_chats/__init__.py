@@ -35,7 +35,6 @@ from .chat_member import ChatMember
 from .chat_member_updated import ChatMemberUpdated
 from .chat_permissions import ChatPermissions
 from .chat_photo import ChatPhoto
-from .chat_preview import ChatPreview
 from .chat_privileges import ChatPrivileges
 from .chat_reactions import ChatReactions
 from .dialog import Dialog
@@ -63,7 +62,6 @@ __all__ = [
     "ChatMember",
     "ChatPermissions",
     "ChatPhoto",
-    "ChatPreview",
     "Dialog",
     "User",
     "Username",
