@@ -314,6 +314,7 @@ def pyrogram_api():
             import_contacts
             get_contacts
             get_contacts_count
+            search_contacts
         """,
         payments="""
         Payments
@@ -406,6 +407,11 @@ def pyrogram_api():
             apply_boost
             get_boosts
             get_boosts_status
+        """,
+        account="""
+        Account
+            get_account_ttl
+            set_account_ttl
         """
     )
 
@@ -475,6 +481,7 @@ def pyrogram_api():
             Folder
             GroupCallMember
             ChatColor
+            FoundContacts
         """,
         messages_media="""
         Messages & Media

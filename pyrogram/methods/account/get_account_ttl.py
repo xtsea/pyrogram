@@ -16,42 +16,29 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from .account import Account
-from .advanced import Advanced
-from .auth import Auth
-from .business import Business
-from .bots import Bots
-from .chats import Chats
-from .contacts import Contacts
-from .decorators import Decorators
-from .invite_links import InviteLinks
-from .messages import Messages
-from .password import Password
-from .payments import Payments
-from .phone import Phone
-from .premium import Premium
-from .users import Users
-from .stories import Stories
-from .utilities import Utilities
+import pyrogram
+from pyrogram import raw
 
 
-class Methods(
-    Account,
-    Advanced,
-    Auth,
-    Business,
-    Bots,
-    Contacts,
-    Password,
-    Payments,
-    Phone,
-    Premium,
-    Chats,
-    Users,
-    Stories,
-    Messages,
-    Decorators,
-    Utilities,
-    InviteLinks,
-):
-    pass
+class GetAccountTTL:
+    async def get_account_ttl(
+        self: "pyrogram.Client",
+    ):
+        """Get days to live of account.
+
+        .. include:: /_includes/usable-by/users.rst
+
+        Returns:
+            ``int``: Time to live in days of the current account.
+
+        Example:
+            .. code-block:: python
+
+                # Get ttl in days
+                await app.get_account_ttl()
+        """
+        r = await self.invoke(
+            raw.functions.account.GetAccountTTL()
+        )
+
+        return r.days
