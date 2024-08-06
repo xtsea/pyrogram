@@ -205,6 +205,7 @@ def pyrogram_api():
             start_bot
             update_color
             delete_chat_history
+            send_paid_media
         """,
         chats="""
         Chats
@@ -523,6 +524,8 @@ def pyrogram_api():
             GiftCode
             CheckedGiftCode
             SuccessfulPayment
+            PaidMediaInfo
+            PaidMediaPreview
         """,
         bot_keyboards="""
         Bot keyboards
