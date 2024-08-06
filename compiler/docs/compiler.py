@@ -204,6 +204,7 @@ def pyrogram_api():
             send_web_page
             start_bot
             update_color
+            delete_chat_history
         """,
         chats="""
         Chats
