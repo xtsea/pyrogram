@@ -16,15 +16,18 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from .get_account_ttl import GetAccountTTL
-from .get_privacy import GetPrivacy
-from .set_account_ttl import SetAccountTTL
-from .set_privacy import SetPrivacy
+import pyrogram
+from pyrogram import raw
+from .input_privacy_rule import InputPrivacyRule
 
-class Account(
-    GetAccountTTL,
-    GetPrivacy,
-    SetAccountTTL,
-    SetPrivacy
-):
-    pass
+
+class InputPrivacyRuleAllowAll(InputPrivacyRule):
+    """Allow all users."""
+
+    def __init__(
+        self,
+    ):
+        super().__init__()
+
+    async def write(self, client: "pyrogram.Client"):
+        return raw.types.InputPrivacyValueAllowAll()

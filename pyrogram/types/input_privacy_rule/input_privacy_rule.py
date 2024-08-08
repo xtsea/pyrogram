@@ -16,15 +16,29 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from .get_account_ttl import GetAccountTTL
-from .get_privacy import GetPrivacy
-from .set_account_ttl import SetAccountTTL
-from .set_privacy import SetPrivacy
+import pyrogram
 
-class Account(
-    GetAccountTTL,
-    GetPrivacy,
-    SetAccountTTL,
-    SetPrivacy
-):
-    pass
+from ..object import Object
+
+
+class InputPrivacyRule(Object):
+    """Content of a privacy rule.
+
+    It should be one of:
+
+    - :obj:`~pyrogram.types.InputPrivacyRuleAllowAll`
+    - :obj:`~pyrogram.types.InputPrivacyRuleAllowContacts`
+    - :obj:`~pyrogram.types.InputPrivacyRuleAllowPremium`
+    - :obj:`~pyrogram.types.InputPrivacyRuleAllowUsers`
+    - :obj:`~pyrogram.types.InputPrivacyRuleAllowChats`
+    - :obj:`~pyrogram.types.InputPrivacyRuleDisallowAll`
+    - :obj:`~pyrogram.types.InputPrivacyRuleDisallowContacts`
+    - :obj:`~pyrogram.types.InputPrivacyRuleDisallowUsers`
+    - :obj:`~pyrogram.types.InputPrivacyRuleDisallowChats`
+    """
+
+    def __init__(self):
+        super().__init__()
+
+    async def write(self, client: "pyrogram.Client"):
+        raise NotImplementedError

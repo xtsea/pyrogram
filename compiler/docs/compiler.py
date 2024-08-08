@@ -414,6 +414,8 @@ def pyrogram_api():
         Account
             get_account_ttl
             set_account_ttl
+            set_privacy
+            get_privacy
         """
     )
 
@@ -484,6 +486,7 @@ def pyrogram_api():
             GroupCallMember
             ChatColor
             FoundContacts
+            PrivacyRule
         """,
         messages_media="""
         Messages & Media
@@ -610,6 +613,18 @@ def pyrogram_api():
             ActiveSessions
             SentCode
             TermsOfService
+        """,
+        input_privacy_rule="""
+        InputPrivacyRule
+            InputPrivacyRuleAllowAll
+            InputPrivacyRuleAllowContacts
+            InputPrivacyRuleAllowPremium
+            InputPrivacyRuleAllowUsers
+            InputPrivacyRuleAllowChats
+            InputPrivacyRuleDisallowAll
+            InputPrivacyRuleDisallowContacts
+            InputPrivacyRuleDisallowUsers
+            InputPrivacyRuleDisallowChats
         """
     )
 
