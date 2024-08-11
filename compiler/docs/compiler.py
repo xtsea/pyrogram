@@ -321,6 +321,8 @@ def pyrogram_api():
         payments="""
         Payments
             check_gift_code
+            get_payment_form
+            send_payment_form
         """,
         phone="""
         Phone
@@ -529,6 +531,7 @@ def pyrogram_api():
             SuccessfulPayment
             PaidMediaInfo
             PaidMediaPreview
+            PaymentForm
         """,
         bot_keyboards="""
         Bot keyboards
@@ -695,6 +698,7 @@ def pyrogram_api():
             Message.react
             Message.read
             Message.view
+            Message.pay
         """,
         chat="""
         Chat
