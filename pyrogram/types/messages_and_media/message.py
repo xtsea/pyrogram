@@ -1028,7 +1028,7 @@ class Message(Object, Update):
                     media_type = enums.MessageMediaType.DICE
                 elif isinstance(media, raw.types.MessageMediaPaidMedia):
                     paid_media = types.PaidMediaInfo._parse(client, media)
-                    media_type = enums.MessageMediaType.PAID
+                    media_type = enums.MessageMediaType.PAID_MEDIA
                 else:
                     media = None
 
