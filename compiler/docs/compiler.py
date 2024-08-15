@@ -206,6 +206,7 @@ def pyrogram_api():
             update_color
             delete_chat_history
             send_paid_media
+            send_paid_reaction
         """,
         chats="""
         Chats
