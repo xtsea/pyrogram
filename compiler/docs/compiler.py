@@ -355,6 +355,7 @@ def pyrogram_api():
             get_chat_menu_button
             answer_web_app_query
             answer_pre_checkout_query
+            create_invoice_link
         """,
         business="""
         Business
