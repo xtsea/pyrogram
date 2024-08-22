@@ -824,6 +824,78 @@ def pyrogram_api():
         f.write(template.format(**fmt_keys))
 
 
+    # Enumerations
+
+    categories = dict(
+        enums="""
+        Enumerations
+            BusinessSchedule
+            ChatAction
+            ChatEventAction
+            ChatMemberStatus
+            ChatMembersFilter
+            ChatType
+            ClientPlatform
+            FolderColor
+            MessageEntityType
+            MessageServiceType
+            MessagesFilter
+            NextCodeType
+            ParseMode
+            PollType
+            PrivacyKey
+            ProfileColor
+            ReplyColor
+            SentCodeType
+            StoriesPrivacyRules
+            UserStatus
+        """,
+    )
+
+    root = PYROGRAM_API_DEST + "/enums"
+
+    shutil.rmtree(root, ignore_errors=True)
+    os.mkdir(root)
+
+    with open(HOME + "/template/enums.rst") as f:
+        template = f.read()
+
+    with open(root + "/cleanup.html", "w") as f:
+        f.write("""<script>
+  document
+    .querySelectorAll("em.property")
+    .forEach((elem, i) => i !== 0 ? elem.remove() : true)
+
+  document
+    .querySelectorAll("a.headerlink")
+    .forEach((elem, i) => [0, 1].includes(i) ? true : elem.remove())
+</script>""")
+
+    with open(root + "/index.rst", "w") as f:
+        fmt_keys = {}
+
+        for k, v in categories.items():
+            name, *enums = get_title_list(v)
+
+            fmt_keys.update({"{}_hlist".format(k): "\n    ".join("{}".format(enum) for enum in enums)})
+
+            fmt_keys.update(
+                {"{}_toctree".format(k): "\n    ".join("{}".format(enum) for enum in enums)})
+
+            # noinspection PyShadowingBuiltins
+            for enum in enums:
+                with open(root + "/{}.rst".format(enum), "w") as f2:
+                    title = "{}".format(enum)
+
+                    f2.write(title + "\n" + "=" * len(title) + "\n\n")
+                    f2.write(".. autoclass:: pyrogram.enums.{}()".format(enum))
+                    f2.write("\n    :members:\n")
+
+                    f2.write("\n.. raw:: html\n    :file: ./cleanup.html\n")
+
+        f.write(template.format(**fmt_keys))
+
+
 def start():
     global page_template
     global toctree
