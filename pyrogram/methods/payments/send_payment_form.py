@@ -25,9 +25,10 @@ from pyrogram import raw
 
 class SendPaymentForm:
     async def send_payment_form(
-        self: "pyrogram.Client",
-        chat_id: Union[int, str],
-        message_id: Union[int, str],
+        self: "pyrogram.Client", *,
+        chat_id: Union[int, str] = None,
+        message_id: int = None,
+        invoice_link: str = None
     ) -> bool:
         """Pay an invoice.
 
@@ -40,12 +41,13 @@ class SendPaymentForm:
         Parameters:
             chat_id (``int`` | ``str``):
                 Unique identifier (int) or username (str) of the target chat.
-                Unique identifier for the target chat in form of a *t.me/joinchat/* link, identifier (int) or username
                 of the target channel/supergroup (in the format @username).
 
-            message_id (``int`` | ``str``):
+            message_id (``int``):
                 Pass a message identifier or to get the invoice from message.
-                Pass a invoice link in form of a *t.me/$...* link or slug itself to get the payment form from link.
+
+            invoice_link (``str``):
+                Pass a invoice link in form of a *t.me/$...* link or slug itself to pay this invoice.
 
         Returns:
             ``bool``: On success, True is returned.
@@ -54,32 +56,35 @@ class SendPaymentForm:
             .. code-block:: python
 
                 # Pay invoice from message
-                app.send_payment_form(chat_id, 123)
+                app.send_payment_form(chat_id=chat_id, message_id=123)
 
                 # Pay invoice form from link
-                # Chat id can be None
-                app.send_payment_form(chat_id, "https://t.me/$xvbzUtt5sUlJCAAATqZrWRy9Yzk")
+                app.send_payment_form(invoice_link="https://t.me/$xvbzUtt5sUlJCAAATqZrWRy9Yzk")
         """
+        if not any((all((chat_id, message_id)), invoice_link)):
+            raise ValueError("You should pass at least one parameter to this method.")
+
+        form = None
         invoice = None
 
-        if isinstance(message_id, int):
+        if message_id:
             invoice = raw.types.InputInvoiceMessage(
                 peer=await self.resolve_peer(chat_id),
                 msg_id=message_id
             )
-        elif isinstance(message_id, str):
-            match = re.match(r"^(?:https?://)?(?:www\.)?(?:t(?:elegram)?\.(?:org|me|dog)/\$)([\w-]+)$", message_id)
+        elif invoice_link:
+            match = re.match(r"^(?:https?://)?(?:www\.)?(?:t(?:elegram)?\.(?:org|me|dog)/\$)([\w-]+)$", invoice_link)
 
             if match:
                 slug = match.group(1)
             else:
-                slug = message_id
+                slug = invoice_link
 
             invoice = raw.types.InputInvoiceSlug(
                 slug=slug
             )
 
-        form = await self.get_payment_form(chat_id=chat_id, message_id=message_id)
+        form = await self.get_payment_form(chat_id=chat_id, message_id=message_id, invoice_link=invoice_link)
 
         # if form.invoice.currency == "XTR":
         await self.invoke(
