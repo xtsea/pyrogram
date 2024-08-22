@@ -27,6 +27,10 @@ class SetAccountTTL:
     ):
         """Set days to live of account.
 
+        .. note::
+
+            Days should be in range 30-548
+
         .. include:: /_includes/usable-by/users.rst
 
         Parameters:
