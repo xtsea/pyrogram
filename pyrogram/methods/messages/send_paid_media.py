@@ -51,7 +51,8 @@ class SendPaidMedia:
         quote_offset: int = None,
         schedule_date: datetime = None,
         protect_content: bool = None,
-        show_above_text: bool = None
+        show_above_text: bool = None,
+        business_connection_id: str = None
     ) -> List["types.Message"]:
         """Send a group or one paid photo/video.
 
@@ -105,6 +106,9 @@ class SendPaidMedia:
             show_above_text (``bool``, *optional*):
                 If True, link preview will be shown above the message text.
                 Otherwise, the link preview will be shown below the message text.
+
+            business_connection_id (``str``, *optional*):
+                Unique identifier of the business connection on behalf of which the message will be sent.
 
         Returns:
             :obj:`~pyrogram.types.Message`: On success, the sent message is returned.
@@ -264,7 +268,15 @@ class SendPaidMedia:
                 **await utils.parse_text_entities(self, caption, parse_mode, caption_entities)
             ),
             sleep_threshold=60,
+            business_connection_id=business_connection_id
         )
+
+        conn_id = None
+
+        for u in r.updates:
+            if getattr(u, "connection_id", None):
+                conn_id = u.connection_id
+                break
 
         return await utils.parse_messages(
             self,
@@ -279,4 +291,5 @@ class SendPaidMedia:
                 users=r.users,
                 chats=r.chats
             ),
+            business_connection_id=conn_id
         )
