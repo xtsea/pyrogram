@@ -99,7 +99,7 @@ class Animation(Object):
     ) -> "Animation":
         return Animation(
             file_id=FileId(
-                file_type=FileType.PHOTO,
+                file_type=FileType.ANIMATION,
                 dc_id=animation.dc_id,
                 media_id=animation.id,
                 access_hash=animation.access_hash,
