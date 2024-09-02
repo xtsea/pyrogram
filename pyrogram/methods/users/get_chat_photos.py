@@ -71,7 +71,9 @@ class GetChatPhotos:
                 r.full_chat.chat_photo,
                 f"photo_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.mp4"
             ) or types.Photo._parse(self, r.full_chat.chat_photo) or []
-            current = [current]
+
+            if current:
+                current = [current]
 
             if not self.me.is_bot:
                 r = await utils.parse_messages(
@@ -105,6 +107,9 @@ class GetChatPhotos:
                         photos = current
                     else:
                         photos = []
+
+            if not photos:
+                return
 
             current = 0
 

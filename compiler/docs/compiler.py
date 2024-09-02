@@ -356,6 +356,7 @@ def pyrogram_api():
             answer_web_app_query
             answer_pre_checkout_query
             create_invoice_link
+            refund_star_payment
         """,
         business="""
         Business
