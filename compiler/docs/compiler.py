@@ -321,6 +321,7 @@ def pyrogram_api():
         """,
         payments="""
         Payments
+            apply_gift_code
             check_gift_code
             get_payment_form
             send_payment_form
@@ -355,6 +356,7 @@ def pyrogram_api():
             get_chat_menu_button
             answer_web_app_query
             answer_pre_checkout_query
+            answer_shipping_query
             create_invoice_link
             refund_star_payment
         """,
@@ -535,6 +537,7 @@ def pyrogram_api():
             PaidMediaInfo
             PaidMediaPreview
             PaymentForm
+            ChatBoost
         """,
         bot_keyboards="""
         Bot keyboards
@@ -562,6 +565,11 @@ def pyrogram_api():
             OrderInfo
             PreCheckoutQuery
             ShippingAddress
+            ShippingQuery
+            MessageReactionUpdated
+            MessageReactionCountUpdated
+            ChatBoostUpdated
+            ShippingOption
         """,
         bot_commands="""
         Bot commands
@@ -750,6 +758,10 @@ def pyrogram_api():
         pre_checkout_query="""
         PreCheckoutQuery
             PreCheckoutQuery.answer
+        """,
+        shipping_query="""
+        ShippingQuery
+            ShippingQuery.answer
         """,
         chat_join_request="""
         ChatJoinRequest

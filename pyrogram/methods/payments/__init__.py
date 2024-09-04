@@ -16,11 +16,13 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from .check_giftcode import CheckGiftCode
+from .apply_gift_code import ApplyGiftCode
+from .check_gift_code import CheckGiftCode
 from .get_payment_form import GetPaymentForm
 from .send_payment_form import SendPaymentForm
 
 class Payments(
+    ApplyGiftCode,
     CheckGiftCode,
     GetPaymentForm,
     SendPaymentForm

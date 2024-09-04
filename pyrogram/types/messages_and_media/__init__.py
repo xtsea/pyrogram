@@ -21,6 +21,7 @@ from .audio import Audio
 from .available_effect import AvailableEffect
 from .boosts_status import BoostsStatus
 from .business_message import BusinessMessage
+from .chat_boost import ChatBoost
 from .checked_gift_code import CheckedGiftCode
 from .contact import Contact
 from .dice import Dice
@@ -67,6 +68,7 @@ __all__ = [
     "AvailableEffect",
     "BoostsStatus",
     "BusinessMessage",
+    "ChatBoost",
     "CheckedGiftCode",
     "Contact",
     "Dice",
