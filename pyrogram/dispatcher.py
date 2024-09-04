@@ -69,6 +69,8 @@ class Dispatcher:
         self.groups = OrderedDict()
 
         async def message_parser(update, users, chats):
+            connection_id = getattr(update, "connection_id", None)
+            
             return (
                 await pyrogram.types.Message._parse(
                     self.client,
@@ -76,8 +78,9 @@ class Dispatcher:
                     users,
                     chats,
                     is_scheduled=isinstance(update, UpdateNewScheduledMessage),
-                    business_connection_id=getattr(update, "connection_id", None),
-                    reply_to_message=getattr(update, "reply_to_message", None)
+                    replies=0 if getattr(update, "connection_id", None) else 1,
+                    business_connection_id=connection_id,
+                    raw_reply_to_message=getattr(update, "reply_to_message", None)
                 ),
                 MessageHandler
             )
