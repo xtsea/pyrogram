@@ -97,6 +97,6 @@ class ChatBoost(Object):
             is_gift=getattr(boost, "gift", None),
             is_giveaway=getattr(boost, "giveaway", None),
             is_unclaimed=getattr(boost, "unclaimed", None),
-            giveaway_message_id=getattr(boost, "giveaway_msg_id ", None),
+            giveaway_message_id=getattr(boost, "giveaway_msg_id", None),
             used_gift_slug=getattr(boost, "used_gift_slug", None),
         )
