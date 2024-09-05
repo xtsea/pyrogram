@@ -1134,10 +1134,10 @@ class Message(Object, Update):
                 parsed_message.quote = True
 
             if message.reply_to:
-                parsed_message.reply_to_message_id = message.reply_to.reply_to_msg_id
-                parsed_message.reply_to_top_message_id = message.reply_to.reply_to_top_id
-
                 if isinstance(message.reply_to, raw.types.MessageReplyHeader):
+                    parsed_message.reply_to_message_id = getattr(message.reply_to, "reply_to_msg_id", None)
+                    parsed_message.reply_to_top_message_id = getattr(message.reply_to, "reply_to_top_id", None)
+                    
                     if message.reply_to.forum_topic:
                         if message.reply_to.reply_to_top_id:
                             parsed_message.message_thread_id = message.reply_to.reply_to_top_id
