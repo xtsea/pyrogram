@@ -17,10 +17,10 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-from typing import Union
+from typing import Union, List
 
 import pyrogram
-from pyrogram import raw
+from pyrogram import raw, types
 
 
 class SendPaymentForm:
@@ -29,7 +29,7 @@ class SendPaymentForm:
         chat_id: Union[int, str] = None,
         message_id: int = None,
         invoice_link: str = None
-    ) -> bool:
+    ) -> List[Union["types.Photo", "types.Video"]]:
         """Pay an invoice.
 
         .. note::
@@ -50,7 +50,7 @@ class SendPaymentForm:
                 Pass a invoice link in form of a *t.me/$...* link or slug itself to pay this invoice.
 
         Returns:
-            ``bool``: On success, True is returned.
+            List of :obj:`~pyrogram.types.Photo` | :obj:`~pyrogram.types.Video`: On success, the list of bought photos and videos is returned.
 
         Example:
             .. code-block:: python
@@ -87,7 +87,7 @@ class SendPaymentForm:
         form = await self.get_payment_form(chat_id=chat_id, message_id=message_id, invoice_link=invoice_link)
 
         # if form.invoice.currency == "XTR":
-        await self.invoke(
+        r = await self.invoke(
             raw.functions.payments.SendStarsForm(
                 form_id=form.id,
                 invoice=invoice
@@ -103,4 +103,30 @@ class SendPaymentForm:
         #         )
         #     )
 
-        return True
+        medias = []
+
+        if isinstance(r, raw.types.payments.PaymentResult):
+            for i in r.updates.updates:
+                if isinstance(i, raw.types.UpdateMessageExtendedMedia):
+                    for ext_media in i.extended_media:
+                        media = ext_media.media
+
+                        if isinstance(media, raw.types.MessageMediaPhoto):
+                            medias.append(types.Photo._parse(self, media.photo))
+                        elif isinstance(media, raw.types.MessageMediaDocument):
+                            doc = media.document
+
+                            attributes = {type(i): i for i in doc.attributes}
+
+                            file_name = getattr(
+                                attributes.get(
+                                    raw.types.DocumentAttributeFilename, None
+                                ), "file_name", None
+                            )
+
+                            video_attributes = attributes[raw.types.DocumentAttributeVideo]
+
+                            medias.append(types.Video._parse(self, doc, video_attributes, file_name))
+
+                    return types.List(medias)
+        # elif isinstance(r, raw.types.payments.PaymentVerificationNeeded):

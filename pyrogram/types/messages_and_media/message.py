@@ -25,7 +25,7 @@ import pyrogram
 from pyrogram import raw, enums
 from pyrogram import types
 from pyrogram import utils
-from pyrogram.errors import ChannelPrivate, MessageIdsEmpty, PeerIdInvalid, ChannelPrivate, BotMethodInvalid, ChannelForumMissing
+from pyrogram.errors import ChannelPrivate, MessageIdsEmpty, PeerIdInvalid, ChannelForumMissing
 from pyrogram.parser import utils as parser_utils, Parser
 from ..object import Object
 from ..update import Update
@@ -4950,7 +4950,7 @@ class Message(Object, Update):
             message_id=self.id
         )
 
-    async def pay(self) -> bool:
+    async def pay(self) -> List[Union["types.Photo", "types.Video"]]:
         """Bound method *pay* of :obj:`~pyrogram.types.Message`.
 
         Use as a shortcut for:
@@ -4968,7 +4968,7 @@ class Message(Object, Update):
                 await message.pay()
 
         Returns:
-            True on success.
+            List of :obj:`~pyrogram.types.Photo` | :obj:`~pyrogram.types.Video`: On success, the list of bought photos and videos is returned.
         """
         return await self._client.send_payment_form(
             chat_id=self.chat.id,
