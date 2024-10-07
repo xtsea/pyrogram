@@ -15,18 +15,30 @@
 #
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
+from typing import List
 
-from .apply_gift_code import ApplyGiftCode
-from .check_gift_code import CheckGiftCode
-from .get_payment_form import GetPaymentForm
-from .get_star_gifts import GetStarGifts
-from .send_payment_form import SendPaymentForm
+import pyrogram
+from pyrogram import raw, types
 
-class Payments(
-    ApplyGiftCode,
-    CheckGiftCode,
-    GetPaymentForm,
-    GetStarGifts,
-    SendPaymentForm
-):
-    pass
+
+class GetStarGifts:
+    async def get_star_gifts(
+        self: "pyrogram.Client",
+    ) -> List["types.StarGift"]:
+        """Get all available star gifts to send.
+
+        .. include:: /_includes/usable-by/users.rst
+
+        Returns:
+            List of :obj:`~pyrogram.types.StarGift`: On success, a list of star gifts is returned.
+
+        Example:
+            .. code-block:: python
+
+                app.get_star_gifts()
+        """
+        r = await self.invoke(
+            raw.functions.payments.GetStarGifts(hash=0)
+        )
+
+        return types.List([await types.StarGift._parse(self, gift) for gift in r.gifts])

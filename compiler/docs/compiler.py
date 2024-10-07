@@ -323,6 +323,7 @@ def pyrogram_api():
             apply_gift_code
             check_gift_code
             get_payment_form
+            get_star_gifts
             send_payment_form
         """,
         phone="""
@@ -517,6 +518,7 @@ def pyrogram_api():
             PollOption
             Dice
             Reaction
+            StarGift
             VideoChatScheduled
             VideoChatStarted
             VideoChatEnded
