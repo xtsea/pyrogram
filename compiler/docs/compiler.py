@@ -322,8 +322,15 @@ def pyrogram_api():
         Payments
             apply_gift_code
             check_gift_code
+            convert_star_gift
             get_payment_form
+            get_star_gifts
+            get_user_star_gifts_count
+            get_user_star_gifts
+            hide_star_gift
             send_payment_form
+            send_star_gift
+            show_star_gift
         """,
         phone="""
         Phone
@@ -500,6 +507,7 @@ def pyrogram_api():
             MessageEntity
             Photo
             Thumbnail
+            UserStarGift
             Audio
             AvailableEffect
             Document
@@ -517,6 +525,7 @@ def pyrogram_api():
             PollOption
             Dice
             Reaction
+            StarGift
             VideoChatScheduled
             VideoChatStarted
             VideoChatEnded
