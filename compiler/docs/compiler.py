@@ -322,6 +322,7 @@ def pyrogram_api():
         Payments
             apply_gift_code
             check_gift_code
+            convert_star_gift
             get_payment_form
             get_star_gifts
             send_payment_form
