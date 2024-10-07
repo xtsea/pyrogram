@@ -21,8 +21,10 @@ from .check_gift_code import CheckGiftCode
 from .convert_star_gift import ConvertStarGift
 from .get_payment_form import GetPaymentForm
 from .get_star_gifts import GetStarGifts
+from .hide_star_gift import HideStarGift
 from .send_payment_form import SendPaymentForm
 from .send_star_gift import SendStarGift
+from .show_star_gift import ShowStarGift
 
 class Payments(
     ApplyGiftCode,
@@ -30,7 +32,9 @@ class Payments(
     ConvertStarGift,
     GetPaymentForm,
     GetStarGifts,
+    HideStarGift,
     SendPaymentForm,
-    SendStarGift
+    SendStarGift,
+    ShowStarGift
 ):
     pass
