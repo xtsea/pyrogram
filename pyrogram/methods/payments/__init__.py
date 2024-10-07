@@ -21,6 +21,8 @@ from .check_gift_code import CheckGiftCode
 from .convert_star_gift import ConvertStarGift
 from .get_payment_form import GetPaymentForm
 from .get_star_gifts import GetStarGifts
+from .get_user_star_gifts_count import GetUserStarGiftsCount
+from .get_user_star_gifts import GetUserStarGifts
 from .hide_star_gift import HideStarGift
 from .send_payment_form import SendPaymentForm
 from .send_star_gift import SendStarGift
@@ -32,6 +34,8 @@ class Payments(
     ConvertStarGift,
     GetPaymentForm,
     GetStarGifts,
+    GetUserStarGiftsCount,
+    GetUserStarGifts,
     HideStarGift,
     SendPaymentForm,
     SendStarGift,
