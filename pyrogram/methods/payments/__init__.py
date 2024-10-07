@@ -21,12 +21,14 @@ from .check_gift_code import CheckGiftCode
 from .get_payment_form import GetPaymentForm
 from .get_star_gifts import GetStarGifts
 from .send_payment_form import SendPaymentForm
+from .send_star_gift import SendStarGift
 
 class Payments(
     ApplyGiftCode,
     CheckGiftCode,
     GetPaymentForm,
     GetStarGifts,
-    SendPaymentForm
+    SendPaymentForm,
+    SendStarGift
 ):
     pass

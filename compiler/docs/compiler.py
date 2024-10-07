@@ -325,6 +325,7 @@ def pyrogram_api():
             get_payment_form
             get_star_gifts
             send_payment_form
+            send_star_gift
         """,
         phone="""
         Phone
