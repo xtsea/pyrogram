@@ -83,8 +83,6 @@ class GetUserStarGifts:
             if not user_star_gifts:
                 return
 
-            offset = r.next_offset
-
             for gift in user_star_gifts:
                 yield gift
 
@@ -92,3 +90,8 @@ class GetUserStarGifts:
 
                 if current >= total:
                     return
+
+            offset = r.next_offset
+
+            if not offset:
+                return

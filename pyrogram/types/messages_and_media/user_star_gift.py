@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 import pyrogram
 from pyrogram import raw
@@ -48,6 +48,9 @@ class UserStarGift(Object):
         text (``str``, *optional*):
             Text message.
 
+        entities (List of :obj:`~pyrogram.types.MessageEntity`, *optional*):
+            For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text.
+
         message_id (``int``, *optional*):
             Unique message identifier.
 
@@ -65,6 +68,7 @@ class UserStarGift(Object):
         is_saved: Optional[bool] = None,
         from_user: Optional["types.User"] = None,
         text: Optional[str] = None,
+        entities: List["types.MessageEntity"] = None,
         message_id: Optional[int] = None,
         convert_price: Optional[int] = None
     ):
@@ -76,6 +80,7 @@ class UserStarGift(Object):
         self.is_saved = is_saved
         self.from_user = from_user
         self.text = text
+        self.entities = entities
         self.message_id = message_id
         self.convert_price = convert_price
 
@@ -85,14 +90,22 @@ class UserStarGift(Object):
         user_star_gift: "raw.types.UserStarGift",
         users: dict
     ) -> "UserStarGift":
-        # TODO: Add entities support
+        text = None
+        entities = None
+
+        if getattr(user_star_gift, "message", None):
+            text = user_star_gift.message.text or None
+            entities = [types.MessageEntity._parse(client, entity, users) for entity in user_star_gift.message.entities]
+            entities = types.List(filter(lambda x: x is not None, entities))
+
         return UserStarGift(
             date=utils.timestamp_to_datetime(user_star_gift.date),
             star_gift=await types.StarGift._parse(client, user_star_gift.gift),
             is_name_hidden=getattr(user_star_gift, "name_hidden", None),
             is_saved=not user_star_gift.unsaved if getattr(user_star_gift, "unsaved", None) else None,
             from_user=types.User._parse(client, users.get(user_star_gift.from_id)) if getattr(user_star_gift, "from_id", None) else None,
-            text=user_star_gift.message.text if getattr(user_star_gift, "message", None) else None,
+            text=text,
+            entities=entities,
             message_id=getattr(user_star_gift, "msg_id", None),
             convert_price=getattr(user_star_gift, "convert_stars", None),
             client=client
