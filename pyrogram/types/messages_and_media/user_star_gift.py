@@ -94,7 +94,7 @@ class UserStarGift(Object):
         entities = None
 
         if getattr(user_star_gift, "message", None):
-            text = user_star_gift.message.text or None
+            text = user_star_gift.message.text
             entities = [types.MessageEntity._parse(client, entity, users) for entity in user_star_gift.message.entities]
             entities = types.List(filter(lambda x: x is not None, entities))
 
