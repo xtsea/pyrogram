@@ -224,6 +224,8 @@ def pyrogram_api():
             set_chat_permissions
             pin_chat_message
             unpin_chat_message
+            pin_forum_topic
+            unpin_forum_topic
             unpin_all_chat_messages
             get_chat
             get_chat_member
@@ -507,7 +509,6 @@ def pyrogram_api():
             MessageEntity
             Photo
             Thumbnail
-            UserStarGift
             Audio
             AvailableEffect
             Document
@@ -814,6 +815,11 @@ def pyrogram_api():
         active_session="""
         ActiveSession
             ActiveSession.reset
+        """,
+        star_gift="""
+        StarGift
+            StarGift.save
+            StarGift.hide
         """
     )
 

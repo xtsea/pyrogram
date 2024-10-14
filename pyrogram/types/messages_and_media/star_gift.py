@@ -16,11 +16,13 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from datetime import datetime
+from typing import Optional, List
 
 import pyrogram
 from pyrogram import raw
 from pyrogram import types
+from pyrogram import utils
 from ..object import Object
 
 
@@ -34,10 +36,25 @@ class StarGift(Object):
         sticker (:obj:`~pyrogram.types.Sticker`):
             Information about the star gift sticker.
 
-        price (``int``):
+        text (``str``, *optional*):
+            Text message.
+
+        entities (List of :obj:`~pyrogram.types.MessageEntity`, *optional*):
+            For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text.
+
+        message_id (``int``, *optional*):
+            Unique message identifier.
+
+        date (``datetime``, *optional*):
+            Date when the star gift was received.
+
+        from_user (:obj:`~pyrogram.types.User`, *optional*):
+            User who sent the star gift.
+
+        price (``int``, *optional*):
             Price of this gift in stars.
 
-        convert_price (``int``):
+        convert_price (``int``, *optional*):
             The number of stars you get if you convert this gift.
 
         available_amount (``int``, *optional*):
@@ -50,6 +67,12 @@ class StarGift(Object):
 
         is_limited (``bool``, *optional*):
             True, if the number of gifts is limited.
+
+        is_name_hidden (``bool``, *optional*):
+            True, if the sender's name is hidden.
+
+        is_saved (``bool``, *optional*):
+            True, if the star gift is saved in profile.
     """
 
     def __init__(
@@ -58,21 +81,35 @@ class StarGift(Object):
         client: "pyrogram.Client" = None,
         id: int,
         sticker: "types.Sticker",
-        price: int,
-        convert_price: int,
+        text: Optional[str] = None,
+        entities: List["types.MessageEntity"] = None,
+        message_id: Optional[int] = None,
+        date: Optional[datetime] = None,
+        from_user: Optional["types.User"] = None,
+        price: Optional[int] = None,
+        convert_price: Optional[int] = None,
         available_amount: Optional[int] = None,
         total_amount: Optional[int] = None,
         is_limited: Optional[bool] = None,
+        is_name_hidden: Optional[bool] = None,
+        is_saved: Optional[bool] = None
     ):
         super().__init__(client)
 
         self.id = id
         self.sticker = sticker
+        self.text = text
+        self.entities = entities
+        self.message_id = message_id
+        self.date = date
+        self.from_user = from_user
         self.price = price
         self.convert_price = convert_price
         self.available_amount = available_amount
         self.total_amount = total_amount
         self.is_limited = is_limited
+        self.is_name_hidden = is_name_hidden
+        self.is_saved = is_saved
 
     @staticmethod
     async def _parse(
@@ -91,4 +128,108 @@ class StarGift(Object):
             total_amount=getattr(star_gift, "availability_total", None),
             is_limited=getattr(star_gift, "limited", None),
             client=client
+        )
+
+    @staticmethod
+    async def _parse_user_star_gift(
+        client,
+        user_star_gift: "raw.types.UserStarGift",
+        users: dict
+    ) -> "StarGift":
+        doc = user_star_gift.gift.sticker
+        attributes = {type(i): i for i in doc.attributes}
+
+        return StarGift(
+            id=user_star_gift.gift.id,
+            sticker=await types.Sticker._parse(client, doc, attributes),
+            price=user_star_gift.gift.stars,
+            convert_price=user_star_gift.gift.convert_stars,
+            available_amount=getattr(user_star_gift.gift, "availability_remains", None),
+            total_amount=getattr(user_star_gift.gift, "availability_total", None),
+            date=utils.timestamp_to_datetime(user_star_gift.date),
+            is_limited=getattr(user_star_gift.gift, "limited", None),
+            is_name_hidden=getattr(user_star_gift, "name_hidden", None),
+            is_saved=not user_star_gift.unsaved if getattr(user_star_gift, "unsaved", None) else None,
+            from_user=types.User._parse(client, users.get(user_star_gift.from_id)) if getattr(user_star_gift, "from_id", None) else None,
+            message_id=getattr(user_star_gift, "msg_id", None),
+            **utils.parse_text_with_entities(client, getattr(user_star_gift, "message", None), users),
+            client=client
+        )
+
+    @staticmethod
+    async def _parse_action(
+        client,
+        message: "raw.base.Message",
+        users: dict
+    ) -> "StarGift":
+        action = message.action
+
+        doc = action.gift.sticker
+        attributes = {type(i): i for i in doc.attributes}
+
+        return StarGift(
+            id=action.gift.id,
+            sticker=await types.Sticker._parse(client, doc, attributes),
+            price=action.gift.stars,
+            convert_price=action.gift.convert_stars,
+            available_amount=getattr(action.gift, "availability_remains", None),
+            total_amount=getattr(action.gift, "availability_total", None),
+            date=utils.timestamp_to_datetime(message.date),
+            is_limited=getattr(action.gift, "limited", None),
+            is_name_hidden=getattr(action, "name_hidden", None),
+            is_saved=getattr(action, "saved", None),
+            from_user=types.User._parse(client, users.get(utils.get_raw_peer_id(message.peer_id))),
+            message_id=message.id,
+            **utils.parse_text_with_entities(client, getattr(action, "message", None), users),
+            client=client
+        )
+
+    async def save(self) -> bool:
+        """Bound method *save* of :obj:`~pyrogram.types.StarGift`.
+
+        Use as a shortcut for:
+
+        .. code-block:: python
+
+            await client.show_star_gift(
+                chat_id=message.chat.id,
+                message_id=message_id
+            )
+
+        Example:
+            .. code-block:: python
+
+                await star_gift.save()
+
+        Returns:
+            ``bool``: On success, True is returned.
+        """
+        return await self._client.show_star_gift(
+            chat_id=self.from_user.id,
+            message_id=self.message_id
+        )
+
+    async def hide(self) -> bool:
+        """Bound method *hide* of :obj:`~pyrogram.types.StarGift`.
+
+        Use as a shortcut for:
+
+        .. code-block:: python
+
+            await client.hide_star_gift(
+                chat_id=message.chat.id,
+                message_id=message_id
+            )
+
+        Example:
+            .. code-block:: python
+
+                await star_gift.hide()
+
+        Returns:
+            ``bool``: On success, True is returned.
+        """
+        return await self._client.hide_star_gift(
+            chat_id=self.from_user.id,
+            message_id=self.message_id
         )

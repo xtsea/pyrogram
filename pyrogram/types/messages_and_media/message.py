@@ -374,6 +374,9 @@ class Message(Object, Update):
         gift_code (:obj:`~pyrogram.types.GiftCode`, *optional*):
             Service message: gift code information.
 
+        star_gift (:obj:`~pyrogram.types.StarGift`, *optional*):
+            Service message: star gift information.
+
         requested_chats (:obj:`~pyrogram.types.RequestedChats`, *optional*):
             Service message: requested chats information.
 
@@ -510,6 +513,7 @@ class Message(Object, Update):
         video_chat_members_invited: "types.VideoChatMembersInvited" = None,
         web_app_data: "types.WebAppData" = None,
         gift_code: "types.GiftCode" = None,
+        star_gift: "types.StarGift" = None,
         requested_chats: "types.RequestedChats" = None,
         successful_payment: "types.SuccessfulPayment" = None,
         giveaway_launched: bool = None,
@@ -623,6 +627,7 @@ class Message(Object, Update):
         self.video_chat_members_invited = video_chat_members_invited
         self.web_app_data = web_app_data
         self.gift_code = gift_code
+        self.star_gift = star_gift
         self.requested_chats = requested_chats
         self.successful_payment = successful_payment
         self.giveaway_launched = giveaway_launched
@@ -706,6 +711,7 @@ class Message(Object, Update):
             boosts_applied = None
             join_request_approved = None
             stars_amount = None
+            star_gift = None
 
             service_type = None
 
@@ -783,7 +789,7 @@ class Message(Object, Update):
                 stars_amount = getattr(action, "stars", None)
                 service_type = enums.MessageServiceType.GIVEAWAY_LAUNCH
             elif isinstance(action, raw.types.MessageActionGiftCode):
-                gift_code = types.GiftCode._parse(client, action, chats)
+                gift_code = types.GiftCode._parse(client, action, users, chats)
                 service_type = enums.MessageServiceType.GIFT_CODE
             elif isinstance(action, (raw.types.MessageActionRequestedPeer, raw.types.MessageActionRequestedPeerSentMe)):
                 requested_chats = types.RequestedChats._parse(client, action)
@@ -800,6 +806,9 @@ class Message(Object, Update):
             elif isinstance(action, raw.types.MessageActionChatJoinedByRequest):
                 join_request_approved = True
                 service_type = enums.MessageServiceType.JOIN_REQUEST_APPROVED
+            elif isinstance(action, raw.types.MessageActionStarGift):
+                star_gift = await types.StarGift._parse_action(client, message, users)
+                service_type = enums.MessageServiceType.STAR_GIFT
 
             from_user = types.User._parse(client, users.get(user_id, None))
             sender_chat = types.Chat._parse(client, message, users, chats, is_chat=False) if not from_user else None
@@ -835,6 +844,7 @@ class Message(Object, Update):
                 web_app_data=web_app_data,
                 giveaway_launched=giveaway_launched,
                 gift_code=gift_code,
+                star_gift=star_gift,
                 stars_amount=stars_amount,
                 requested_chats=requested_chats,
                 successful_payment=successful_payment,
