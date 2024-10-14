@@ -46,7 +46,7 @@ class GetUserStarGifts:
                 Maximum amount of star gifts to be returned.
 
         Returns:
-            ``Generator``: A generator yielding :obj:`~pyrogram.types.UserStarGift` objects.
+            ``Generator``: A generator yielding :obj:`~pyrogram.types.StarGift` objects.
 
         Example:
             .. code-block:: python
@@ -76,7 +76,7 @@ class GetUserStarGifts:
             users = {u.id: u for u in r.users}
 
             user_star_gifts = [
-                await types.UserStarGift._parse(self, gift, users)
+                await types.StarGift._parse_user_star_gift(self, gift, users)
                 for gift in r.gifts
             ]
 

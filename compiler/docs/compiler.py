@@ -509,7 +509,6 @@ def pyrogram_api():
             MessageEntity
             Photo
             Thumbnail
-            UserStarGift
             Audio
             AvailableEffect
             Document
@@ -816,6 +815,11 @@ def pyrogram_api():
         active_session="""
         ActiveSession
             ActiveSession.reset
+        """,
+        star_gift="""
+        StarGift
+            StarGift.save
+            StarGift.hide
         """
     )
 
