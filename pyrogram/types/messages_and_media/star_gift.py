@@ -136,14 +136,6 @@ class StarGift(Object):
         user_star_gift: "raw.types.UserStarGift",
         users: dict
     ) -> "StarGift":
-        text = None
-        entities = None
-
-        if getattr(user_star_gift, "message", None):
-            text = user_star_gift.message.text
-            entities = [types.MessageEntity._parse(client, entity, users) for entity in user_star_gift.message.entities]
-            entities = types.List(filter(lambda x: x is not None, entities))
-
         doc = user_star_gift.gift.sticker
         attributes = {type(i): i for i in doc.attributes}
 
@@ -159,9 +151,8 @@ class StarGift(Object):
             is_name_hidden=getattr(user_star_gift, "name_hidden", None),
             is_saved=not user_star_gift.unsaved if getattr(user_star_gift, "unsaved", None) else None,
             from_user=types.User._parse(client, users.get(user_star_gift.from_id)) if getattr(user_star_gift, "from_id", None) else None,
-            text=text,
-            entities=entities,
             message_id=getattr(user_star_gift, "msg_id", None),
+            **utils.parse_text_with_entities(client, getattr(user_star_gift, "message", None), users),
             client=client
         )
 
@@ -172,14 +163,6 @@ class StarGift(Object):
         users: dict
     ) -> "StarGift":
         action = message.action
-
-        text = None
-        entities = None
-
-        if getattr(action, "message", None):
-            text = action.message.text
-            entities = [types.MessageEntity._parse(client, entity, users) for entity in action.message.entities]
-            entities = types.List(filter(lambda x: x is not None, entities))
 
         doc = action.gift.sticker
         attributes = {type(i): i for i in doc.attributes}
@@ -196,9 +179,8 @@ class StarGift(Object):
             is_name_hidden=getattr(action, "name_hidden", None),
             is_saved=getattr(action, "saved", None),
             from_user=types.User._parse(client, users.get(utils.get_raw_peer_id(message.peer_id))),
-            text=text,
-            entities=entities,
             message_id=message.id,
+            **utils.parse_text_with_entities(client, getattr(action, "message", None), users),
             client=client
         )
 

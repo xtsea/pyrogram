@@ -789,7 +789,7 @@ class Message(Object, Update):
                 stars_amount = getattr(action, "stars", None)
                 service_type = enums.MessageServiceType.GIVEAWAY_LAUNCH
             elif isinstance(action, raw.types.MessageActionGiftCode):
-                gift_code = types.GiftCode._parse(client, action, chats)
+                gift_code = types.GiftCode._parse(client, action, users, chats)
                 service_type = enums.MessageServiceType.GIFT_CODE
             elif isinstance(action, (raw.types.MessageActionRequestedPeer, raw.types.MessageActionRequestedPeerSentMe)):
                 requested_chats = types.RequestedChats._parse(client, action)

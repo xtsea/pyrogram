@@ -498,3 +498,18 @@ def get_first_url(text):
     matches = re.findall(r"(https?):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])", text)
 
     return f"{matches[0][0]}://{matches[0][1]}{matches[0][2]}" if matches else None
+
+
+def parse_text_with_entities(client, message: "raw.types.TextWithEntities", users):
+    return {
+        "text": getattr(message, "text", None),
+        "entities": types.List(
+            filter(
+                lambda x: x is not None,
+                [
+                    types.MessageEntity._parse(client, entity, users)
+                    for entity in getattr(message, "entities", [])
+                ]
+            )
+        ) or None
+    }
